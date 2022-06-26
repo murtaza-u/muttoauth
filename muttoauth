@@ -19,7 +19,7 @@ scope="https://mail.google.com/"
 auth_uri="https://accounts.google.com/o/oauth2/auth?client_id=$id&redirect_uri=$redirect_uri&scope=$scope&response_type=code"
 tkn_uri="https://accounts.google.com/o/oauth2/token"
 
-generate() {
+authorize() {
     file="$1"
     if [[ -z "$file" ]]; then
         echo "error: token file not provided"
@@ -68,9 +68,9 @@ dependency() {
 }
 
 help() {
-    echo "${1##*/} [-g|-r|-d|-h] [TKN_FILE]
-    -g TKN_FILE
-        * Generates a new token
+    echo "${1##*/} [-a|-r|-d|-h] [TKN_FILE]
+    -a TKN_FILE
+        * Authorize
         * Saves the refresh token to the specified path
 
     -r TKN_FILE
@@ -88,10 +88,10 @@ if [[ -z "$*" ]]; then
     exit 1
 fi
 
-while getopts "hgrd" arg 2>/dev/null; do
+while getopts "hard" arg 2>/dev/null; do
     case "${arg}" in
         h) help "$0" ;;
-        g) generate "$2" ;;
+        a) authorize "$2" ;;
         r) refresh "$2" ;;
         d) dependency ;;
         *) echo "error: invalid arguments"; exit 1 ;;
